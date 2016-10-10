@@ -132,6 +132,7 @@ if __name__ == '__main__':
     # TODO: ADD COMMAND-LINE ARGUMENTS TO THIS SO THAT IT DOESN'T NEED TO BE RECOMPILED
 #    host = '192.168.1.104'
     host = imutil.default_host
+    host = '172.16.23.81'
     port = imutil.default_port
     server = None
     

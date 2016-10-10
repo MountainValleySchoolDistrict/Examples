@@ -18,8 +18,10 @@ def Prompt(message, default=None, val=None, validate=None, errmsg=None):
     while True:    
         try:
             value = None
-            prompt = message if default is None else '{} [{}]'.format(message, default)
-            print('{}: '.format(prompt), end='')
+            prompt = None
+            if not message == None:
+                prompt = '{}:'.format(message) if default is None else '{} [{}]:'.format(message, default)
+                print(prompt, end='')
             input_string = input().strip()
             if len(input_string) > 0:
                 value = val(input_string)

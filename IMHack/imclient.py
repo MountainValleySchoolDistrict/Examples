@@ -61,7 +61,7 @@ class IMClient:
         data = {'src':self.__username}
         
         execute = (msg[0] == '{') and (msg[-1] == '}')
-        if execute:
+        if execute: # Local Python Execution
             data = None
             self.__exec(msg) # NOTE: THIS MAY STILL BE DANGEROUS... NEED TO CHECK IF THIS IS REACHABLE WITHOUT REMOTE EXECUTION ENABLED
         elif msg[0] in set('#@'):
@@ -81,8 +81,10 @@ class IMClient:
         else:
             data['message'] = msg if not is_file else imutil.LoadFile(msg)
             
-        if (not data is None) and ('message' in data):
+        if self.__send_valid(data):
             self.__ss.send(json.dumps(data).encode())
+        else:
+            pass # TODO: ERROR HANDLING FOR AN INVALID DATA PACKET
             
     def __partitionSpecial(self, msg):
         head = special = tail = None
@@ -119,23 +121,24 @@ class IMClient:
                                     self.Send('Remote Execution on {} disabled.  Sorry!'.format(self.__username))
                             else:
                                 if not 'src' in data or data['src'] == '':
-                                    print('{prefix}{message}'.format(prefix=prefix, **data))                            
+                                    print('\r{prefix}{message}'.format(prefix=prefix, **data))                            
                                 else:
-                                    print('{prefix}{src} says: {message}'.format(prefix=prefix, **data))
-                        except:
-                            pass    
-                except:
+                                    print('\r{prefix}{src} says: {message}'.format(prefix=prefix, **data))
+                        except Exception as e:
+                            pass
+                except Exception as e:
                     pass
+        
+    def __send_valid(self, data):
+        return (not data is None) and (('message' in data) or ('cmd' in data))
         
     def __exec(self, msg, echo_errors=True):
         code = msg[1:-1]
         try:
-            print('EXECUTING -- {}'.format(code))
             exec(code, self.__global_env, self.__local_env)
         except Exception as e:
             if echo_errors:
                 print(e)
-    
     
 
 if __name__ == '__main__':
@@ -148,7 +151,7 @@ if __name__ == '__main__':
     
         while True:        
             # Send Messages
-            msg = imutil.Prompt('{}: '.format(username))
+            msg = imutil.Prompt(None)
             client.Send(msg)
     finally:
         client.close()
