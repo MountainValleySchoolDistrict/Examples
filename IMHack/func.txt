@@ -1,0 +1,7 @@
+{
+import time
+def foo(name, num):
+    for _ in range(num):
+        client.Send("@{} Fluffy!".format(name))
+        time.sleep(0.1)
+}
