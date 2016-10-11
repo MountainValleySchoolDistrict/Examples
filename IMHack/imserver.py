@@ -130,9 +130,16 @@ class IMServer(threading.Thread):
         
 if __name__ == '__main__':
     # TODO: ADD COMMAND-LINE ARGUMENTS TO THIS SO THAT IT DOESN'T NEED TO BE RECOMPILED
+    # -P, --port [8881]
+    # -H, --host [127.0.0.1 or IP Address]
+    # --loopback [false]
+    # -Q, --queue [5]
+    # -B, --buffer [4096]
+    # --debug [false]
+
 #    host = '192.168.1.104'
     host = imutil.default_host
-    host = '172.16.23.81'
+#    host = '172.16.23.81'
     port = imutil.default_port
     server = None
     
